@@ -1,17 +1,17 @@
-use std::{process, fs::File, error::Error};
 use serde::Deserialize;
-
+use std::{error::Error, fs::File, process};
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 struct ProStats {
     playername: String,
     teamname: String,
-    kills: u64,
-    deaths: u64,
-    assists: u64,
+    kills: Option<u64>,
+    deaths: Option<u64>,
+    assists: Option<u64>,
     #[serde(rename = "total cs")]
-    total_cs: u64,
+    total_cs: Option<u64>,
+    league: String,
 }
 
 /*
@@ -27,26 +27,26 @@ struct Record {
 }
 */
 
-
-fn main(){
-    if let Err(err) = run() {
+fn main() {
+    if let Err(err) = store_player() {
         println!("{}", err);
         process::exit(1);
     }
 }
 
 //Reading from CSV
-fn run() -> Result<(), Box<dyn Error>> {
+fn store_player() -> Result<(), Box<dyn Error>> {
     // Create a CSV parser that reads data from file.
-    let file = File::open("test2.csv")?;
+    let file = File::open("test3.csv")?;
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(true)
         .from_reader(file);
     // Loop over each record.
     for result in rdr.deserialize() {
         let record: ProStats = result?;
-        println!("{:?}", record);
+        if record.league == "LCK" && !record.playername.is_empty() {
+            println!("{:?}", record);
+        }
     }
     Ok(())
 }
-
