@@ -1,18 +1,6 @@
-use serde::Deserialize;
-use std::{error::Error, fs::File, process};
+mod stats;
 
-#[allow(dead_code)]
-#[derive(Debug, Deserialize)]
-struct ProStats {
-    playername: String,
-    teamname: String,
-    kills: Option<u64>,
-    deaths: Option<u64>,
-    assists: Option<u64>,
-    #[serde(rename = "total cs")]
-    total_cs: Option<u64>,
-    league: String,
-}
+use std::process;
 
 /*
 #[allow(dead_code)]
@@ -28,25 +16,15 @@ struct Record {
 */
 
 fn main() {
-    if let Err(err) = store_player() {
-        println!("{}", err);
-        process::exit(1);
-    }
-}
-
-//Reading from CSV
-fn store_player() -> Result<(), Box<dyn Error>> {
-    // Create a CSV parser that reads data from file.
-    let file = File::open("test3.csv")?;
-    let mut rdr = csv::ReaderBuilder::new()
-        .has_headers(true)
-        .from_reader(file);
-    // Loop over each record.
-    for result in rdr.deserialize() {
-        let record: ProStats = result?;
-        if record.league == "LCK" && !record.playername.is_empty() {
-            println!("{:?}", record);
+    match stats::store_player() {
+        Ok(players) => {
+            for player in players {
+                println!("{:?}", player);
+            }
+        }
+        Err(err) => {
+            println!("{}", err);
+            process::exit(1);
         }
     }
-    Ok(())
 }

@@ -1,0 +1,11 @@
+/Users/nick/Projects/esports-csv-parser/target/debug/deps/libtoml-a0f7ea262b72b563.rmeta: /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/lib.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/parser.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/display.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/encoder/mod.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/encoder/rustc_serialize.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/decoder/mod.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/decoder/rustc_serialize.rs
+
+/Users/nick/Projects/esports-csv-parser/target/debug/deps/toml-a0f7ea262b72b563.d: /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/lib.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/parser.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/display.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/encoder/mod.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/encoder/rustc_serialize.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/decoder/mod.rs /Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/decoder/rustc_serialize.rs
+
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/lib.rs:
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/parser.rs:
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/display.rs:
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/encoder/mod.rs:
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/encoder/rustc_serialize.rs:
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/decoder/mod.rs:
+/Users/nick/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.1.30/src/decoder/rustc_serialize.rs:
