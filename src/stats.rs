@@ -1,7 +1,8 @@
+use csv::WriterBuilder;
 use serde::{Deserialize, Deserializer};
 use std::{collections::HashMap, error::Error, fs::File};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ProStats {
     position: String,
     playername: String,
@@ -12,7 +13,11 @@ pub struct ProStats {
     deaths: f64,
     #[serde(default, deserialize_with = "default_empty_string_to_f64")]
     assists: f64,
-    #[serde(rename = "total cs", default, deserialize_with = "default_empty_string_to_f64")]
+    #[serde(
+        rename = "total cs",
+        default,
+        deserialize_with = "default_empty_string_to_f64"
+    )]
     total_cs: f64,
     league: String,
     #[serde(default)]
@@ -39,14 +44,17 @@ impl Team {
         &self.teamname
     }
 
+    pub fn get_result(&self) -> &u32 {
+        &self.wins
+    }
+
     pub fn print_teams(teams: &[Team]) {
-        println!("{:<20}{}", "Team Name", "Wins");
+        println!("{:<20}Wins", "Team Name");
         for team in teams {
             println!("{:<20}{}", team.teamname, team.wins);
         }
     }
 }
-
 
 // Getter implementations are available within the impl block if needed.
 impl ProStats {
@@ -64,6 +72,10 @@ impl ProStats {
         &self.position
     }
 
+    pub fn update_totalpoints(&mut self) {
+        self.totalpoints += self.weeklypoints;
+    }
+
     /// Calculates and updates the weeklypoints based on the player's stats.
     pub fn calculate_points(&mut self) {
         let kills = self.kills;
@@ -72,11 +84,14 @@ impl ProStats {
         let total_cs = self.total_cs;
 
         if self.position == "top" || self.position == "jng" {
-            self.weeklypoints = (kills * 0.4) + (assists * 0.2) + (total_cs * 0.002) - (deaths * 0.15);
+            self.weeklypoints =
+                (kills * 0.4) + (assists * 0.2) + (total_cs * 0.002) - (deaths * 0.15);
         } else if self.position == "mid" || self.position == "bot" {
-            self.weeklypoints = (kills * 0.4) + (assists * 0.15) + (total_cs * 0.0015) - (deaths * 0.2);
+            self.weeklypoints =
+                (kills * 0.4) + (assists * 0.15) + (total_cs * 0.0015) - (deaths * 0.2);
         } else {
-            self.weeklypoints = (kills * 0.3) + (assists * 0.25) + (total_cs * 0.003) - (deaths * 0.1);
+            self.weeklypoints =
+                (kills * 0.3) + (assists * 0.25) + (total_cs * 0.003) - (deaths * 0.1);
         }
 
         self.weeklypoints = (self.weeklypoints * 100.0).round() / 100.0;
@@ -90,7 +105,7 @@ impl ProStats {
         for player in players {
             if player.teamname != current_team {
                 if !current_team.is_empty() {
-                    println!(); // blank line between teams
+                    println!();
                 }
                 current_team = player.teamname.clone();
                 println!("{}", current_team);
@@ -102,7 +117,10 @@ impl ProStats {
     pub fn print_by_name(players: &[ProStats], name: &str) {
         // Convert target name to lowercase once.
         let target = name.to_lowercase();
-        if let Some(player) = players.iter().find(|p| p.playername.to_lowercase() == target) {
+        if let Some(player) = players
+            .iter()
+            .find(|p| p.playername.to_lowercase() == target)
+        {
             Self::print_header();
             Self::print_player(player);
         } else {
@@ -112,17 +130,17 @@ impl ProStats {
 
     pub fn print_by_name_no_header(players: &[ProStats], name: &str) {
         let target = name.to_lowercase();
-        if let Some(player) = players.iter().find(|p| p.playername.to_lowercase() == target) {
-            // Use internal helper to print a player's row.
-            // (Assumes that print_player is a private function within the impl or module.)
+        if let Some(player) = players
+            .iter()
+            .find(|p| p.playername.to_lowercase() == target)
+        {
             ProStats::print_player(player);
         } else {
             println!("Player not found: {}", name);
         }
     }
-    
+
     pub fn print_by_team(players: &[ProStats], teamname: &str) {
-        // Convert target team name to lowercase once.
         let target = teamname.to_lowercase();
         let filtered: Vec<&ProStats> = players
             .iter()
@@ -138,9 +156,7 @@ impl ProStats {
             Self::print_player(player);
         }
     }
-    
 
-    /// Prints the top player (highest weeklypoints) for each role.
     pub fn print_top_role(players: &[ProStats]) {
         let roles = vec!["top", "jng", "mid", "bot", "sup"];
         println!("Top Players by Role:");
@@ -156,7 +172,6 @@ impl ProStats {
         }
     }
 
-    // Private helper to print the header.
     pub fn print_header() {
         println!(
             "{:<20}{:>10}{:>10}{:>10}{:>7}{:>10}{:>10}",
@@ -164,7 +179,6 @@ impl ProStats {
         );
     }
 
-    // Private helper to print a single player's stats.
     pub fn print_player(player: &ProStats) {
         println!(
             "{:<20}{:>10}{:>10}{:>10}{:>7}{:>10.2}{:>10.2}",
@@ -179,7 +193,6 @@ impl ProStats {
     }
 }
 
-// Helper function: Converts an empty string to 0.0 during deserialization.
 fn default_empty_string_to_f64<'de, D>(deserializer: D) -> Result<f64, D::Error>
 where
     D: Deserializer<'de>,
@@ -220,21 +233,17 @@ pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
                     e.assists += record.assists;
                     e.total_cs += record.total_cs;
                     e.weeklypoints += record.weeklypoints;
-                    e.totalpoints += record.weeklypoints;
                 })
-                .or_insert_with(|| {
-                    record.totalpoints = record.weeklypoints;
-                    record
-                });
+                .or_insert_with(|| record);
         } else if record.playername.is_empty() && record.league == "LCK" {
             team_map
                 .entry(record.teamname.clone())
                 .and_modify(|team| {
-                    team.wins += record.result; // Increment the win count (or other result data)
+                    team.wins += record.result;
                 })
                 .or_insert_with(|| {
                     let mut new_team = Team::new(record.teamname.clone());
-                    new_team.wins = record.result; // Initialize with the result value
+                    new_team.wins = record.result;
                     new_team
                 });
         }
@@ -252,7 +261,44 @@ pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
     Ok((pro_list, team_list))
 }
 
-// Helper: Defines an order for player roles.
+/// Writes or updates the players to the `pro_list.csv` file.
+pub fn write_players_to_csv(players: &[ProStats], file_path: &str) -> Result<(), Box<dyn Error>> {
+    let file = File::create(file_path)?;
+    let mut wtr = WriterBuilder::new().has_headers(true).from_writer(file);
+
+    wtr.write_record([
+        "position",
+        "playername",
+        "teamname",
+        "kills",
+        "deaths",
+        "assists",
+        "total cs",
+        "league",
+        "weeklypoints",
+        "totalpoints",
+    ])?;
+
+    for player in players {
+        wtr.write_record([
+            &player.position,
+            &player.playername,
+            &player.teamname,
+            "0",
+            "0",
+            "0",
+            "0",
+            &player.league,
+            "0",
+            &player.totalpoints.to_string(),
+        ])?;
+    }
+
+    wtr.flush()?;
+    println!("Players successfully written to {}", file_path);
+    Ok(())
+}
+
 fn role_order(role: &str) -> usize {
     match role {
         "top" => 1,
