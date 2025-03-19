@@ -3,6 +3,15 @@ use std::{error::Error, fs::File};
 
 use crate::stats::Team;
 
+///Determines if the center value will be true or false depending on left,
+///center, and right values
+///
+/// # Examples
+///
+///  ```
+///  bits = [true, true, false]
+///  set bits = true
+///  ```
 #[derive(Debug, Deserialize)]
 pub struct Coach {
     coach_name: String,
@@ -17,7 +26,15 @@ pub struct Coach {
 }
 
 impl Coach {
-    // Constructor for a new Coach
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn new(
         coach_name: String,
         top: String,
@@ -39,12 +56,38 @@ impl Coach {
             totalpoints: 0.0,
         }
     }
+    #[cfg(test)]
+    pub fn weeklypoints(&self) -> f64 {
+        self.weeklypoints
+    }
 
+    #[cfg(test)]
+    pub fn totalpoints(&self) -> f64 {
+        self.totalpoints
+    }
+
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn get_coach_name(&self) -> &str {
         &self.coach_name
     }
 
-    // Setter for a specific role (top, jungle, mid, bot, support)
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn set_role(&mut self, role: &str, player_name: String) {
         match role.to_lowercase().as_str() {
             "top" => self.top = player_name,
@@ -56,19 +99,54 @@ impl Coach {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn get_team(&self) -> &str {
         &self.team
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn set_team(&mut self, new_team: String) {
         self.team = new_team;
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn get_totalpoints(&self) -> f64 {
         self.totalpoints
     }
 
-    // Function to load coaches from a CSV file
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn load_from_csv(file_path: &str) -> Result<Vec<Coach>, Box<dyn Error>> {
         let file = File::open(file_path)?;
         let mut rdr = csv::ReaderBuilder::new()
@@ -85,7 +163,15 @@ impl Coach {
         Ok(coaches)
     }
 
-    // Function to set weekly points using the player stats
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn set_weekly(&mut self, pro_list: &[crate::stats::ProStats], team_list: &[Team]) {
         fn find_player_weekly(player_name: &str, pro_list: &[crate::stats::ProStats]) -> f64 {
             // Lowercase the coach's player name for comparison.
@@ -128,10 +214,28 @@ impl Coach {
             + (team_weekly as f64 * 2.5);
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn set_total(&mut self) {
         self.totalpoints += self.weeklypoints;
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn remove_coach_by_name(coaches: &mut Vec<Coach>, name: &str) -> bool {
         if let Some(pos) = coaches
             .iter()
@@ -144,6 +248,15 @@ impl Coach {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_team_by_coach(
         coaches: &[Coach],
         players: &[crate::stats::ProStats],
@@ -170,7 +283,15 @@ impl Coach {
         println!();
     }
 
-    // Function to print all coaches
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_all(coaches: &[Coach]) {
         // Print header line.
         println!(
@@ -187,6 +308,15 @@ impl Coach {
         println!();
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn write_to_csv(
         coaches: &mut [Coach],
         file_path: &str,

@@ -2,6 +2,15 @@ use csv::WriterBuilder;
 use serde::{Deserialize, Deserializer};
 use std::{collections::HashMap, error::Error, fs::File};
 
+///Determines if the center value will be true or false depending on left,
+///center, and right values
+///
+/// # Examples
+///
+///  ```
+///  bits = [true, true, false]
+///  set bits = true
+///  ```
 #[derive(Debug, Deserialize, Clone)]
 pub struct ProStats {
     position: String,
@@ -28,26 +37,76 @@ pub struct ProStats {
     result: u32,
 }
 
+///Determines if the center value will be true or false depending on left,
+///center, and right values
+///
+/// # Examples
+///
+///  ```
+///  bits = [true, true, false]
+///  set bits = true
+///  ```
 #[derive(Debug, Default)]
 pub struct Team {
     teamname: String,
-    wins: u32, // Tracks the number of wins for the team
+    wins: u32,
 }
 
 impl Team {
-    /// Create a new team with a given name and zero initial wins
+    // Create a new team with a given name and zero initial wins
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn new(teamname: String) -> Self {
         Self { teamname, wins: 0 }
     }
+    // New team for testing
+    #[cfg(test)]
+    pub fn new_with_wins(teamname: String, wins: u32) -> Self {
+        Self { teamname, wins }
+    }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn teamname(&self) -> &str {
         &self.teamname
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn get_result(&self) -> &u32 {
         &self.wins
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```    
     pub fn print_teams(teams: &[Team]) {
         println!("{:<20}Wins", "Team Name");
         for team in teams {
@@ -56,27 +115,96 @@ impl Team {
     }
 }
 
-// Getter implementations are available within the impl block if needed.
 impl ProStats {
-    // Public getter for playername.
+    #[cfg(test)]
+    pub fn new(
+        playername: String,
+        position: String,
+        teamname: String,
+        kills: f64,
+        deaths: f64,
+        assists: f64,
+        total_cs: f64,
+        league: String,
+        weeklypoints: f64,
+        totalpoints: f64,
+    ) -> Self {
+        Self {
+            playername,
+            position,
+            teamname,
+            kills,
+            deaths,
+            assists,
+            total_cs,
+            league,
+            weeklypoints,
+            totalpoints,
+            result: 0,
+        }
+    }
+
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn playername(&self) -> &str {
         &self.playername
     }
 
-    // Public getter for weeklypoints.
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn weeklypoints(&self) -> f64 {
         self.weeklypoints
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn position(&self) -> &str {
         &self.position
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn update_totalpoints(&mut self) {
         self.totalpoints += self.weeklypoints;
     }
 
-    /// Calculates and updates the weeklypoints based on the player's stats.
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn calculate_points(&mut self) {
         let kills = self.kills;
         let deaths = self.deaths;
@@ -97,8 +225,15 @@ impl ProStats {
         self.weeklypoints = (self.weeklypoints * 100.0).round() / 100.0;
     }
 
-    /// Prints all players in the given slice.
-    /// The players are grouped by team with a single header printed at the top.
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_all(players: &[ProStats]) {
         Self::print_header();
         let mut current_team = String::new();
@@ -114,6 +249,15 @@ impl ProStats {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_by_name(players: &[ProStats], name: &str) {
         // Convert target name to lowercase once.
         let target = name.to_lowercase();
@@ -128,6 +272,15 @@ impl ProStats {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_by_name_no_header(players: &[ProStats], name: &str) {
         let target = name.to_lowercase();
         if let Some(player) = players
@@ -140,6 +293,15 @@ impl ProStats {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_by_team(players: &[ProStats], teamname: &str) {
         let target = teamname.to_lowercase();
         let filtered: Vec<&ProStats> = players
@@ -157,6 +319,15 @@ impl ProStats {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_top_role(players: &[ProStats]) {
         let roles = vec!["top", "jng", "mid", "bot", "sup"];
         println!("Top Players by Role:");
@@ -172,6 +343,15 @@ impl ProStats {
         }
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_header() {
         println!(
             "{:<20}{:>10}{:>10}{:>10}{:>7}{:>10}{:>10}",
@@ -179,6 +359,15 @@ impl ProStats {
         );
     }
 
+    ///Determines if the center value will be true or false depending on left,
+    ///center, and right values
+    ///
+    /// # Examples
+    ///
+    ///  ```
+    ///  bits = [true, true, false]
+    ///  set bits = true
+    ///  ```
     pub fn print_player(player: &ProStats) {
         println!(
             "{:<20}{:>10}{:>10}{:>10}{:>7}{:>10.2}{:>10.2}",
@@ -201,6 +390,15 @@ where
     Ok(s.unwrap_or("").parse::<f64>().unwrap_or(0.0))
 }
 
+///Determines if the center value will be true or false depending on left,
+///center, and right values
+///
+/// # Examples
+///
+///  ```
+///  bits = [true, true, false]
+///  set bits = true
+///  ```
 pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
     let file_players = File::open("pro_list.csv")?;
     let mut rdr_players = csv::ReaderBuilder::new()
@@ -216,7 +414,7 @@ pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
         pro_map.insert(record.playername.clone(), record);
     }
 
-    let file_new_stats = File::open("test3.csv")?;
+    let file_new_stats = File::open("data.csv")?;
     let mut rdr_new_stats = csv::ReaderBuilder::new()
         .has_headers(true)
         .from_reader(file_new_stats);
@@ -261,7 +459,15 @@ pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
     Ok((pro_list, team_list))
 }
 
-/// Writes or updates the players to the `pro_list.csv` file.
+///Determines if the center value will be true or false depending on left,
+///center, and right values
+///
+/// # Examples
+///
+///  ```
+///  bits = [true, true, false]
+///  set bits = true
+///  ```
 pub fn write_players_to_csv(players: &[ProStats], file_path: &str) -> Result<(), Box<dyn Error>> {
     let file = File::create(file_path)?;
     let mut wtr = WriterBuilder::new().has_headers(true).from_writer(file);
@@ -299,6 +505,7 @@ pub fn write_players_to_csv(players: &[ProStats], file_path: &str) -> Result<(),
     Ok(())
 }
 
+// Role Helper!
 fn role_order(role: &str) -> usize {
     match role {
         "top" => 1,

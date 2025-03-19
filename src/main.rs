@@ -35,7 +35,7 @@ fn run_menu(players: &mut [ProStats], teams: &[Team], coaches: &mut Vec<Coach>) 
         println!("1: Coach Options");
         println!("2: Pro Stats");
         println!("3: View All Teams");
-        println!("4: Utility Options");
+        println!("4: Utility Options (Save Here!)");
         println!("0: Quit");
         print!("Enter your choice (as an integer): ");
         io::stdout().flush().unwrap();
@@ -220,7 +220,7 @@ fn utility_menu(players: &mut [ProStats], coaches: &mut [Coach]) {
     }
 }
 
-/// Prompts the user to build a new coach with player inputs.
+// Prompts the user to build a new coach with player inputs.
 fn build_new_coach(players: &[ProStats], teams: &[Team]) -> Coach {
     let mut input = String::new();
 
@@ -245,7 +245,7 @@ fn build_new_coach(players: &[ProStats], teams: &[Team]) -> Coach {
     Coach::new(coach_name, top, jng, mid, bot, sup, team)
 }
 
-/// Prompts for a player name for the given role until a valid one is entered.
+// Prompts for a player name for the given role until a valid one is entered.
 fn prompt_for_valid_player(expected_role: &str, players: &[ProStats]) -> String {
     let mut input = String::new();
     loop {
@@ -277,8 +277,6 @@ fn prompt_for_valid_team(teams: &[Team]) -> String {
         input.clear();
         io::stdin().read_line(&mut input).unwrap();
         let team_name = input.trim();
-
-        // Use the `teamname` getter for validation
         if teams
             .iter()
             .any(|t| t.teamname().eq_ignore_ascii_case(team_name))
@@ -290,7 +288,7 @@ fn prompt_for_valid_team(teams: &[Team]) -> String {
     }
 }
 
-/// Removes a coach by name.
+// Removes a coach by name.
 fn remove_coach(coaches: &mut Vec<Coach>) {
     print!("Enter the name of the coach to remove: ");
     io::stdout().flush().unwrap();
@@ -306,7 +304,7 @@ fn remove_coach(coaches: &mut Vec<Coach>) {
     }
 }
 
-/// Prints a coach's team by name.
+// Prints a coach's team by name.
 fn print_coach_team(coaches: &[Coach], players: &[ProStats]) {
     print!("Enter the coach's name to view their team: ");
     io::stdout().flush().unwrap();
@@ -381,7 +379,7 @@ fn edit_team(coaches: &mut [Coach], players: &[ProStats], teams: &[Team]) {
     }
 }
 
-/// Prints player stats by name.
+// Prints player stats by name.
 fn print_pro_stat_by_name(players: &[ProStats]) {
     print!("Enter the player's name: ");
     io::stdout().flush().unwrap();
@@ -393,7 +391,7 @@ fn print_pro_stat_by_name(players: &[ProStats]) {
     ProStats::print_by_name(players, player_name);
 }
 
-/// Prints player stats by team.
+// Prints player stats by team.
 fn print_pro_stat_by_team(players: &[ProStats]) {
     print!("Enter the team's name: ");
     io::stdout().flush().unwrap();
@@ -416,5 +414,231 @@ fn calculate_coach_points(players: &[ProStats], teams: &[Team], coaches: &mut [C
     for coach in coaches.iter_mut() {
         coach.set_weekly(players, teams);
         coach.set_total();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::coaches::Coach;
+    use crate::stats::ProStats;
+    use crate::stats::Team;
+
+    #[test]
+    fn test_set_weekly_and_total() {
+        let players = vec![
+            ProStats::new(
+                "Player1".to_string(),
+                "top".to_string(),
+                "Team1".to_string(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                "LCK".to_string(),
+                20.0,
+                0.0,
+            ),
+            ProStats::new(
+                "Player2".to_string(),
+                "jng".to_string(),
+                "Team1".to_string(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                "LCK".to_string(),
+                15.0,
+                0.0,
+            ),
+        ];
+        let teams = vec![Team::new_with_wins("Team1".to_string(), 2)];
+        let mut coach = Coach::new(
+            "Coach1".to_string(),
+            "Player1".to_string(),
+            "Player2".to_string(),
+            "Player3".to_string(),
+            "Player4".to_string(),
+            "Player5".to_string(),
+            "Team1".to_string(),
+        );
+
+        coach.set_weekly(&players, &teams);
+        assert_eq!(coach.weeklypoints(), 40.0);
+
+        coach.set_total();
+        assert_eq!(coach.totalpoints(), 40.0);
+    }
+    #[test]
+    fn test_set_weekly_missing_players() {
+        let players = vec![ProStats::new(
+            "Player1".to_string(),
+            "top".to_string(),
+            "Team1".to_string(),
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            "LCK".to_string(),
+            20.0,
+            0.0,
+        )];
+        let teams = vec![Team::new_with_wins("Team1".to_string(), 2)];
+        let mut coach = Coach::new(
+            "Coach1".to_string(),
+            "Player1".to_string(),
+            "MissingPlayer".to_string(),
+            "Player3".to_string(),
+            "Player4".to_string(),
+            "Player5".to_string(),
+            "Team1".to_string(),
+        );
+
+        coach.set_weekly(&players, &teams);
+        assert_eq!(coach.weeklypoints(), 20.0 + 0.0 + (2.0 * 2.5)); // Only Player1 and team points
+    }
+
+    #[test]
+    fn test_set_weekly_missing_team() {
+        let players = vec![
+            ProStats::new(
+                "Player1".to_string(),
+                "top".to_string(),
+                "Team1".to_string(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                "LCK".to_string(),
+                20.0,
+                0.0,
+            ),
+            ProStats::new(
+                "Player2".to_string(),
+                "jng".to_string(),
+                "Team1".to_string(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                "LCK".to_string(),
+                15.0,
+                0.0,
+            ),
+        ];
+        let teams = vec![]; // No teams in the list
+        let mut coach = Coach::new(
+            "Coach1".to_string(),
+            "Player1".to_string(),
+            "Player2".to_string(),
+            "Player3".to_string(),
+            "Player4".to_string(),
+            "Player5".to_string(),
+            "MissingTeam".to_string(), // Team not in `teams`
+        );
+
+        coach.set_weekly(&players, &teams);
+        assert_eq!(coach.weeklypoints(), 20.0 + 15.0 + 0.0); // Only player points
+    }
+
+    #[test]
+    fn test_remove_coach_by_name() {
+        let mut coaches = vec![
+            Coach::new(
+                "Coach1".to_string(),
+                "Player1".to_string(),
+                "Player2".to_string(),
+                "Player3".to_string(),
+                "Player4".to_string(),
+                "Player5".to_string(),
+                "Team1".to_string(),
+            ),
+            Coach::new(
+                "Coach2".to_string(),
+                "Player6".to_string(),
+                "Player7".to_string(),
+                "Player8".to_string(),
+                "Player9".to_string(),
+                "Player10".to_string(),
+                "Team2".to_string(),
+            ),
+        ];
+
+        let result = Coach::remove_coach_by_name(&mut coaches, "Coach1");
+        assert!(result); // Successfully removed
+        assert_eq!(coaches.len(), 1);
+        assert_eq!(coaches[0].get_coach_name(), "Coach2");
+
+        let result_nonexistent = Coach::remove_coach_by_name(&mut coaches, "NonexistentCoach");
+        assert!(!result_nonexistent); // No coach removed
+        assert_eq!(coaches.len(), 1); // Length remains the same
+    }
+
+    #[test]
+    fn test_print_by_team() {
+        let players = vec![
+            ProStats::new(
+                "Player1".to_string(),
+                "top".to_string(),
+                "Team1".to_string(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                "LCK".to_string(),
+                10.0,
+                50.0,
+            ),
+            ProStats::new(
+                "Player2".to_string(),
+                "jng".to_string(),
+                "Team2".to_string(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                "LCK".to_string(),
+                15.0,
+                30.0,
+            ),
+        ];
+
+        ProStats::print_by_team(&players, "Team1");
+    }
+
+    #[test]
+    fn test_empty_players_and_teams() {
+        let players: Vec<ProStats> = vec![];
+        let teams: Vec<Team> = vec![];
+        let mut coach = Coach::new(
+            "Coach1".to_string(),
+            "Player1".to_string(),
+            "Player2".to_string(),
+            "Player3".to_string(),
+            "Player4".to_string(),
+            "Player5".to_string(),
+            "Team1".to_string(),
+        );
+
+        coach.set_weekly(&players, &teams);
+        assert_eq!(coach.weeklypoints(), 0.0); // No points calculated
+    }
+
+    #[test]
+    fn test_write_to_csv() {
+        let mut coaches = vec![Coach::new(
+            "Coach1".to_string(),
+            "Player1".to_string(),
+            "Player2".to_string(),
+            "Player3".to_string(),
+            "Player4".to_string(),
+            "Player5".to_string(),
+            "Team1".to_string(),
+        )];
+
+        let file_path = "test_coaches.csv";
+        let result = Coach::write_to_csv(&mut coaches, file_path);
+        assert!(result.is_ok());
+
+        std::fs::remove_file(file_path).unwrap(); // Clean up test file
     }
 }
