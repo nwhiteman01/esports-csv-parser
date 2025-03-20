@@ -131,7 +131,7 @@ fn coach_options_menu(coaches: &mut Vec<Coach>, players: &[ProStats], teams: &[T
     }
 }
 
-///Pro Stats menu 
+///Pro Stats menu
 fn pro_stats_menu(players: &mut [ProStats]) {
     loop {
         println!("\nPro Stats Menu:");
@@ -422,7 +422,7 @@ fn update_all_player_points(players: &mut [ProStats]) {
     println!("Total points for all players have been updated.");
 }
 
-///Updates weekly and totalpoints for Coaches. 
+///Updates weekly and totalpoints for Coaches.
 fn calculate_coach_points(players: &[ProStats], teams: &[Team], coaches: &mut [Coach]) {
     for coach in coaches.iter_mut() {
         coach.set_weekly(players, teams);
