@@ -2,15 +2,8 @@ use csv::WriterBuilder;
 use serde::{Deserialize, Deserializer};
 use std::{collections::HashMap, error::Error, fs::File};
 
-///Determines if the center value will be true or false depending on left,
-///center, and right values
-///
-/// # Examples
-///
-///  ```
-///  bits = [true, true, false]
-///  set bits = true
-///  ```
+///A struct that stores the stats and fantasy points
+///of each pro player
 #[derive(Debug, Deserialize, Clone)]
 pub struct ProStats {
     position: String,
@@ -37,15 +30,7 @@ pub struct ProStats {
     result: u32,
 }
 
-///Determines if the center value will be true or false depending on left,
-///center, and right values
-///
-/// # Examples
-///
-///  ```
-///  bits = [true, true, false]
-///  set bits = true
-///  ```
+///Struct for each LCK Team, stores their wins and names
 #[derive(Debug, Default)]
 pub struct Team {
     teamname: String,
@@ -53,16 +38,7 @@ pub struct Team {
 }
 
 impl Team {
-    // Create a new team with a given name and zero initial wins
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
-    ///
-    /// # Examples
-    ///
-    ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
-    ///  ```
+    ///Constructor for Team. Builds a new Team with zero wins
     pub fn new(teamname: String) -> Self {
         Self { teamname, wins: 0 }
     }
@@ -72,40 +48,40 @@ impl Team {
         Self { teamname, wins }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Getter for Team. Returns teamname
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_team.teamname();
+    ///  "Dplus Kia"
     ///  ```
     pub fn teamname(&self) -> &str {
         &self.teamname
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Getter for Team. Returns wins
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_team.get_result();
+    ///  "12"
     ///  ```
     pub fn get_result(&self) -> &u32 {
         &self.wins
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
-    ///
+    ///Prints all of the team names and wins out of a
+    ///Vector of Teams
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  Team::print_teams(teams)
+    ///  Team Name      Wins
+    ///  KT Rolster     7
+    ///  Dplus Kia      12
+    ///  etc...
     ///  ```    
     pub fn print_teams(teams: &[Team]) {
         println!("{:<20}Wins", "Team Name");
@@ -116,6 +92,7 @@ impl Team {
 }
 
 impl ProStats {
+    //Empty ProStat but only using it in tests since it shouldn't be needed
     #[cfg(test)]
     pub fn new(
         playername: String,
@@ -144,66 +121,64 @@ impl ProStats {
         }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Getter for ProStats. Returns playername
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_player.playername()
+    ///  Siwoo
     ///  ```
     pub fn playername(&self) -> &str {
         &self.playername
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Getter for ProStats. Returns weeklypoints
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_player.weeklypoints()
+    ///  24.5
     ///  ```
     pub fn weeklypoints(&self) -> f64 {
         self.weeklypoints
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Getter for ProStats. Returns position
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_player.position()
+    ///  top
     ///  ```
     pub fn position(&self) -> &str {
         &self.position
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Adds the current totalpoints with weeklypoints
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_player.update_totalpoints()
+    ///  24.00 += 25.00
+    ///  totalpoints = 29.00
     ///  ```
     pub fn update_totalpoints(&mut self) {
         self.totalpoints += self.weeklypoints;
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Calculates pro player's points based off role and stats
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  example_player.calculate_points()
+    ///  (example_player is top lane)
+    ///  weeklypoints = (3 * 0.4) + (2 * 0.2) + (202 * 0.002) - (2 * 0.15)
+    ///  weeklypoints = 1.7
     ///  ```
     pub fn calculate_points(&mut self) {
         let kills = self.kills;
@@ -225,14 +200,19 @@ impl ProStats {
         self.weeklypoints = (self.weeklypoints * 100.0).round() / 100.0;
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Prints all of the pro players
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  Name                     Kills    Deaths   Assists     CS    Weekly     Total
+    ///  BNK FEARX
+    ///  Clear                       20        48        59   2885     18.36     18.36
+    ///  Raptor                      32        51        67   2206     22.98     22.98
+    ///  VicLa                       26        49        67   3261     15.54     15.54
+    ///  Diable                      59        34        52   3710     30.16     30.16
+    ///  Kellin                       8        54        96    335     22.01     22.01
+    ///  etc...
     ///  ```
     pub fn print_all(players: &[ProStats]) {
         Self::print_header();
@@ -249,14 +229,14 @@ impl ProStats {
         }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Searches through ProStats vector for the inputted playername
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  ProStats::print_by_name(players, Clear);
+    ///  Name                     Kills    Deaths   Assists     CS    Weekly     Total
+    ///  Clear                       20        48        59   2885     18.36     18.36
     ///  ```
     pub fn print_by_name(players: &[ProStats], name: &str) {
         // Convert target name to lowercase once.
@@ -272,14 +252,14 @@ impl ProStats {
         }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Searches through ProStats vector for the inputted playername, but DOES NOT print
+    ///header. Used more as a helper function for Coaches.
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  ProStats::print_by_name_no_header(players, Clear);
+    ///  Clear                       20        48        59   2885     18.36     18.36
     ///  ```
     pub fn print_by_name_no_header(players: &[ProStats], name: &str) {
         let target = name.to_lowercase();
@@ -293,14 +273,19 @@ impl ProStats {
         }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Searches through ProStats vector for the inputted teamname
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  ProStats::print_by_team(players, BNK FearX);
+    ///  Name                     Kills    Deaths   Assists     CS    Weekly     Total
+    ///  BNK FEARX
+    ///  Clear                       20        48        59   2885     18.36     18.36
+    ///  Raptor                      32        51        67   2206     22.98     22.98
+    ///  VicLa                       26        49        67   3261     15.54     15.54
+    ///  Diable                      59        34        52   3710     30.16     30.16
+    ///  Kellin                       8        54        96    335     22.01     22.01
     ///  ```
     pub fn print_by_team(players: &[ProStats], teamname: &str) {
         let target = teamname.to_lowercase();
@@ -319,14 +304,19 @@ impl ProStats {
         }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Prints the top weekly scorers per role
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  ProStats::print_top_role(players);
+    ///  Top Players by Role:
+    ///  Name                     Kills    Deaths   Assists     CS    Weekly     Total
+    ///  Morgan                   10043        40        71   3860   4033.11   4033.11
+    ///  GIDEON                      69        55       199   5481     70.12     70.12
+    ///  Zeka                        93        51       148   6446     58.87     58.87
+    ///  Viper                      134        48       146   6940     76.32     76.32
+    ///  Delight                     32        77       242    916     65.16     65.16
     ///  ```
     pub fn print_top_role(players: &[ProStats]) {
         let roles = vec!["top", "jng", "mid", "bot", "sup"];
@@ -343,14 +333,14 @@ impl ProStats {
         }
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Helper function that prints the header for each of the pro
+    ///stats printer functions
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  print_header()
+    ///  Name                     Kills    Deaths   Assists     CS    Weekly     Total
     ///  ```
     pub fn print_header() {
         println!(
@@ -359,14 +349,12 @@ impl ProStats {
         );
     }
 
-    ///Determines if the center value will be true or false depending on left,
-    ///center, and right values
+    ///Helper function that prints the pro stats for a player
     ///
     /// # Examples
     ///
     ///  ```
-    ///  bits = [true, true, false]
-    ///  set bits = true
+    ///  GIDEON                      69        55       199   5481     70.12     70.12
     ///  ```
     pub fn print_player(player: &ProStats) {
         println!(
@@ -382,6 +370,7 @@ impl ProStats {
     }
 }
 
+///Turns an empty string to a f64 in order to avoid errors when deserializing
 fn default_empty_string_to_f64<'de, D>(deserializer: D) -> Result<f64, D::Error>
 where
     D: Deserializer<'de>,
@@ -390,16 +379,13 @@ where
     Ok(s.unwrap_or("").parse::<f64>().unwrap_or(0.0))
 }
 
-///Determines if the center value will be true or false depending on left,
-///center, and right values
-///
-/// # Examples
-///
-///  ```
-///  bits = [true, true, false]
-///  set bits = true
-///  ```
+///Parses through both pro_list.csv and data.csv and store the data into two vectors
+///One vector is for ProStats for all the pro players and the other is for Teams
+///for all the Teams in the LCK. All the stats are deserialized and stored into their
+///structs. They are stored in alphabetical order and for ProStats, they are stored in
+///order of role (top -> jng -> mid -> bot -> sup)
 pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
+    //Deserialize the First Pro List
     let file_players = File::open("pro_list.csv")?;
     let mut rdr_players = csv::ReaderBuilder::new()
         .has_headers(true)
@@ -408,12 +394,12 @@ pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
     let mut pro_map: HashMap<String, ProStats> = HashMap::new();
     let mut team_map: HashMap<String, Team> = HashMap::new();
 
-    // Read records from pro_list.csv.
     for result in rdr_players.deserialize() {
         let record: ProStats = result?;
         pro_map.insert(record.playername.clone(), record);
     }
 
+    //Deserialize the actual data
     let file_new_stats = File::open("data.csv")?;
     let mut rdr_new_stats = csv::ReaderBuilder::new()
         .has_headers(true)
@@ -459,15 +445,9 @@ pub fn store_player() -> Result<(Vec<ProStats>, Vec<Team>), Box<dyn Error>> {
     Ok((pro_list, team_list))
 }
 
-///Determines if the center value will be true or false depending on left,
-///center, and right values
-///
-/// # Examples
-///
-///  ```
-///  bits = [true, true, false]
-///  set bits = true
-///  ```
+///Stores all the pro players to pro_list.csv.
+///Resets everything to 0 except for totalpoints in order
+///to reset for the next week.
 pub fn write_players_to_csv(players: &[ProStats], file_path: &str) -> Result<(), Box<dyn Error>> {
     let file = File::create(file_path)?;
     let mut wtr = WriterBuilder::new().has_headers(true).from_writer(file);
@@ -505,7 +485,7 @@ pub fn write_players_to_csv(players: &[ProStats], file_path: &str) -> Result<(),
     Ok(())
 }
 
-// Role Helper!
+///Matches a role with a usize to help with sorting by role
 fn role_order(role: &str) -> usize {
     match role {
         "top" => 1,

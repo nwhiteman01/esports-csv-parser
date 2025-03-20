@@ -1,0 +1,2 @@
+window.ALL_CRATES = ["chrono","core_foundation_sys","csv","csv_core","esports_parser","iana_time_zone","itoa","memchr","num_traits","proc_macro2","quote","ryu","serde","serde_derive","syn","unicode_ident"];
+//{"start":21,"fragment_lengths":[8,22,6,11,17,17,7,9,13,14,8,6,8,15,6,16]}

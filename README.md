@@ -1,7 +1,6 @@
 Nicholas Whiteman
 Esports CSV Parser
 
-
 About:
 Esports CSV Parser is a program that takes in the mega data from Oracle’s Elixir CSV League of Legends file and parses that data. 
 It specifically looks for LCK players and calculates the total amount of fantasy points for that week. It will then store that
@@ -19,10 +18,12 @@ program already does so), rename it to "data.csv" and replace the file in the ES
 It should then work! 
 
 The actual program is straight forward, your menus will determine what you plan on doing. I personally recommend checking the Pro Stats
-menu first to see all the parsing, then you could add your own coach and so on in the other menus. 
+menu first to see all the parsing, then you could add your own coach and so on in the other menus.
 
 I put in warnings for calulcations, please only calculate once and save once as it will continue adding points every time you calculate. 
 I will discuss future options in my "Plans" section. 
+
+rustdoc: cargo doc --open 
 
 Process:
 This code is based off of my own personal project named "fantasyLCK". These both accomplish the same thing, but "fantasyLCK" is in C++. 

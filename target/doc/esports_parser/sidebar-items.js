@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["build_new_coach","calculate_coach_points","coach_options_menu","edit_team","main","print_coach_team","print_pro_stat_by_name","print_pro_stat_by_team","pro_stats_menu","prompt_for_valid_player","prompt_for_valid_team","remove_coach","run_menu","update_all_player_points","utility_menu"],"mod":["coaches","stats"]};

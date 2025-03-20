@@ -6,6 +6,7 @@ mod stats;
 use coaches::Coach;
 use stats::{store_player, ProStats, Team};
 
+//Main
 fn main() {
     // Load players and teams from CSV files.
     let (mut players, teams) = match store_player() {
@@ -29,6 +30,9 @@ fn main() {
     run_menu(&mut players, &teams, &mut coaches);
 }
 
+// MENUS
+
+//Main menu
 fn run_menu(players: &mut [ProStats], teams: &[Team], coaches: &mut Vec<Coach>) {
     loop {
         println!("\nMain Menu:");
@@ -72,6 +76,7 @@ fn run_menu(players: &mut [ProStats], teams: &[Team], coaches: &mut Vec<Coach>) 
     }
 }
 
+///Coach menu
 fn coach_options_menu(coaches: &mut Vec<Coach>, players: &[ProStats], teams: &[Team]) {
     loop {
         println!("\nCoach Options:");
@@ -126,6 +131,7 @@ fn coach_options_menu(coaches: &mut Vec<Coach>, players: &[ProStats], teams: &[T
     }
 }
 
+///Pro Stats menu 
 fn pro_stats_menu(players: &mut [ProStats]) {
     loop {
         println!("\nPro Stats Menu:");
@@ -175,6 +181,7 @@ fn pro_stats_menu(players: &mut [ProStats]) {
     }
 }
 
+///Utility menu
 fn utility_menu(players: &mut [ProStats], coaches: &mut [Coach]) {
     loop {
         println!("\nUtility Options:");
@@ -220,7 +227,9 @@ fn utility_menu(players: &mut [ProStats], coaches: &mut [Coach]) {
     }
 }
 
-// Prompts the user to build a new coach with player inputs.
+//Menu Options
+
+///Prompts the user to build a new coach with player inputs.
 fn build_new_coach(players: &[ProStats], teams: &[Team]) -> Coach {
     let mut input = String::new();
 
@@ -245,7 +254,7 @@ fn build_new_coach(players: &[ProStats], teams: &[Team]) -> Coach {
     Coach::new(coach_name, top, jng, mid, bot, sup, team)
 }
 
-// Prompts for a player name for the given role until a valid one is entered.
+///Prompts for a player name for the given role until a valid one is entered.
 fn prompt_for_valid_player(expected_role: &str, players: &[ProStats]) -> String {
     let mut input = String::new();
     loop {
@@ -268,6 +277,7 @@ fn prompt_for_valid_player(expected_role: &str, players: &[ProStats]) -> String 
     }
 }
 
+///Prompts for a LCK team name for the given role until a valid one is entered.
 fn prompt_for_valid_team(teams: &[Team]) -> String {
     let mut input = String::new();
 
@@ -288,7 +298,7 @@ fn prompt_for_valid_team(teams: &[Team]) -> String {
     }
 }
 
-// Removes a coach by name.
+///Removes a coach by name.
 fn remove_coach(coaches: &mut Vec<Coach>) {
     print!("Enter the name of the coach to remove: ");
     io::stdout().flush().unwrap();
@@ -304,7 +314,7 @@ fn remove_coach(coaches: &mut Vec<Coach>) {
     }
 }
 
-// Prints a coach's team by name.
+///Prints a coach's team by name.
 fn print_coach_team(coaches: &[Coach], players: &[ProStats]) {
     print!("Enter the coach's name to view their team: ");
     io::stdout().flush().unwrap();
@@ -316,6 +326,7 @@ fn print_coach_team(coaches: &[Coach], players: &[ProStats]) {
     Coach::print_team_by_coach(coaches, players, target_coach);
 }
 
+///Coaches can edit their team given a variety of options
 fn edit_team(coaches: &mut [Coach], players: &[ProStats], teams: &[Team]) {
     let mut input = String::new();
     print!("Enter the coach's name: ");
@@ -379,7 +390,7 @@ fn edit_team(coaches: &mut [Coach], players: &[ProStats], teams: &[Team]) {
     }
 }
 
-// Prints player stats by name.
+///Takes user input for pro player and prints that player
 fn print_pro_stat_by_name(players: &[ProStats]) {
     print!("Enter the player's name: ");
     io::stdout().flush().unwrap();
@@ -391,7 +402,7 @@ fn print_pro_stat_by_name(players: &[ProStats]) {
     ProStats::print_by_name(players, player_name);
 }
 
-// Prints player stats by team.
+///Takes user input for team and prints that team
 fn print_pro_stat_by_team(players: &[ProStats]) {
     print!("Enter the team's name: ");
     io::stdout().flush().unwrap();
@@ -403,6 +414,7 @@ fn print_pro_stat_by_team(players: &[ProStats]) {
     ProStats::print_by_team(players, team_name);
 }
 
+///Updates the totalpoints for pro players
 fn update_all_player_points(players: &mut [ProStats]) {
     for player in players.iter_mut() {
         player.update_totalpoints();
@@ -410,12 +422,15 @@ fn update_all_player_points(players: &mut [ProStats]) {
     println!("Total points for all players have been updated.");
 }
 
+///Updates weekly and totalpoints for Coaches. 
 fn calculate_coach_points(players: &[ProStats], teams: &[Team], coaches: &mut [Coach]) {
     for coach in coaches.iter_mut() {
         coach.set_weekly(players, teams);
         coach.set_total();
     }
 }
+
+//Tests
 
 #[cfg(test)]
 mod tests {
