@@ -196,8 +196,6 @@ impl ProStats {
             self.weeklypoints =
                 (kills * 0.3) + (assists * 0.25) + (total_cs * 0.003) - (deaths * 0.1);
         }
-
-        self.weeklypoints = (self.weeklypoints * 100.0).round() / 100.0;
     }
 
     ///Prints all of the pro players

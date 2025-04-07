@@ -373,7 +373,7 @@ fn edit_team(coaches: &mut [Coach], players: &[ProStats], teams: &[Team]) {
                     break;
                 }
                 Ok(5) => {
-                    coach.set_role("support", prompt_for_valid_player("support", players));
+                    coach.set_role("support", prompt_for_valid_player("sup", players));
                     break;
                 }
                 Ok(6) => {
